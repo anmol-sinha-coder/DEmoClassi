@@ -141,6 +141,8 @@ def run_fer(model, optimizer, epochs, log_interval, dataloaders,
         if launch_tensorboard:
             writer.add_scalar('avg_loss', avg_nll, engine.state.epoch)
             writer.add_scalar('avg_accuracy', avg_accuracy, engine.state.epoch)
+        if float(avg_accuracy)>0.96:
+            break
 
         # print metrics on validation set
         evaluator.run(val_loader)
@@ -158,6 +160,9 @@ def run_fer(model, optimizer, epochs, log_interval, dataloaders,
             val_writer.add_scalar('avg_accuracy', avg_accuracy, engine.state.epoch)
 
         pbar.n = pbar.last_print_n = 0
+        if float(avg_accuracy)>0.96:
+            break
+
 
     # Utility function for unfreezing frozen layer for finetuning
     @trainer.on(Events.EPOCH_STARTED)
