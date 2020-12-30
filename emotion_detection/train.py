@@ -142,7 +142,7 @@ def run_fer(model, optimizer, epochs, log_interval, dataloaders,
             writer.add_scalar('avg_loss', avg_nll, engine.state.epoch)
             writer.add_scalar('avg_accuracy', avg_accuracy, engine.state.epoch)
         if float(avg_accuracy)>0.96:
-            break
+            return
 
         # print metrics on validation set
         evaluator.run(val_loader)
@@ -161,7 +161,7 @@ def run_fer(model, optimizer, epochs, log_interval, dataloaders,
 
         pbar.n = pbar.last_print_n = 0
         if float(avg_accuracy)>0.96:
-            break
+            return
 
 
     # Utility function for unfreezing frozen layer for finetuning
