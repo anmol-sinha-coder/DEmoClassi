@@ -37,7 +37,7 @@ def count_parameters(model):
     :param model: pytorch model
     :return:
     """
-    print(f"Number of trainable parameters : {sum(p.numel() for p in model.parameters() if p.requires_grad):,}")
+    print(f"\nNumber of trainable parameters : {sum(p.numel() for p in model.parameters() if p.requires_grad):,}")
     print(f"Number of non-trainable parameters : {sum(p.numel() for p in model.parameters() if not p.requires_grad):,}")
 
 
