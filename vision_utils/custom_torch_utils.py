@@ -79,7 +79,7 @@ def initialize_model(model_name, feature_extract, num_classes=7, task='fer2013',
     if model_name == "resnet":
         """ Resnet 50
         """
-        model_ft = models.resnet50(pretrained=use_pretrained)
+        model_ft = models.resnet50(pretrained=use_pretrained).to(device)
         set_parameter_requires_grad(model_ft, feature_extract)
         num_ftrs = model_ft.fc.in_features
         if task == 'fer2013':
