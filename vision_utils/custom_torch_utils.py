@@ -53,7 +53,7 @@ def set_parameter_requires_grad(model, feature_extracting):
             param.requires_grad = False
 
 
-def initialize_model(model_name, feature_extract, num_classes=7, task='fer2013', use_pretrained=True):
+def initialize_model(model_name, feature_extract, num_classes=7, task='fer2013', use_pretrained=True, device=None):
 
     """
     Instantiate a pytorch model loading eventually pretrained weights from torchvision models zoo
@@ -91,7 +91,7 @@ def initialize_model(model_name, feature_extract, num_classes=7, task='fer2013',
     elif model_name == "alexnet":
         """ Alexnet
         """
-        model_ft = models.alexnet(pretrained=use_pretrained)
+        model_ft = models.alexnet(pretrained=use_pretrained).to(device)
         set_parameter_requires_grad(model_ft, feature_extract)
         num_ftrs = model_ft.classifier[6].in_features
         if task == 'fer2013':
@@ -103,7 +103,7 @@ def initialize_model(model_name, feature_extract, num_classes=7, task='fer2013',
     elif model_name == "vgg":
         """ VGG19
         """
-        model_ft = models.vgg19_bn(pretrained=use_pretrained)
+        model_ft = models.vgg19_bn(pretrained=use_pretrained).to(device)
         set_parameter_requires_grad(model_ft, feature_extract)
         num_ftrs = model_ft.classifier[6].in_features
         if task == 'fer2013':
@@ -115,7 +115,7 @@ def initialize_model(model_name, feature_extract, num_classes=7, task='fer2013',
     elif model_name == "squeezenet":
         """ Squeezenet
         """
-        model_ft = models.squeezenet1_0(pretrained=use_pretrained)
+        model_ft = models.squeezenet1_0(pretrained=use_pretrained).to(device)
         set_parameter_requires_grad(model_ft, feature_extract)
         model_ft.classifier[1] = nn.Conv2d(512, num_classes, kernel_size=(1, 1), stride=(1, 1))
         model_ft.num_classes = num_classes
@@ -124,7 +124,7 @@ def initialize_model(model_name, feature_extract, num_classes=7, task='fer2013',
     elif model_name == "densenet":
         """ Densenet
         """
-        model_ft = models.densenet121(pretrained=use_pretrained)
+        model_ft = models.densenet121(pretrained=use_pretrained).to(device)
         set_parameter_requires_grad(model_ft, feature_extract)
         num_ftrs = model_ft.classifier.in_features
         if task == 'fer2013':
@@ -137,7 +137,7 @@ def initialize_model(model_name, feature_extract, num_classes=7, task='fer2013',
         """ Inception v3
         Be careful, expects (299,299) sized images and has auxiliary output
         """
-        model_ft = models.inception_v3(pretrained=use_pretrained)
+        model_ft = models.inception_v3(pretrained=use_pretrained).to(device)
         set_parameter_requires_grad(model_ft, feature_extract)
         # Handle the auxiliary net
         num_ftrs = model_ft.AuxLogits.fc.in_features
@@ -151,7 +151,7 @@ def initialize_model(model_name, feature_extract, num_classes=7, task='fer2013',
         print("Invalid model name, exiting...")
         exit()
 
-    return model_ft, input_size
+    return model_ft.to(device), input_size
 
 
 class MultiTaskAccuracy(Metric):
